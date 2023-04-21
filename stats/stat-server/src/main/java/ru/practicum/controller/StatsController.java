@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.StatCountDto;
 import ru.practicum.dto.StatDto;
 import ru.practicum.service.StatService;
+import static ru.practicum.other.OtherUtils.getFormatter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
@@ -24,9 +24,9 @@ public class StatsController {
     private final StatService service;
 
     @PostMapping("/hit")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus
     public void createStat(@RequestBody @NotNull @Valid StatDto dto) {
-        log.info("Запись в статистику: {}", dto);
+        log.info("Write in statistics {}", dto);
         service.createStat(dto);
     }
 
@@ -35,9 +35,9 @@ public class StatsController {
                                                        @RequestParam(name = "end") String end,
                                                        @RequestParam(name = "unique", defaultValue = "false") Boolean unique,
                                                        @RequestParam(name = "uris", required = false) List<String> uris) {
-        log.info("Получение статистики: с = {}, по = {}, ип уникальные = {}, фильтр = {}", start, end, unique, uris);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return new ResponseEntity<>(service.getStats(LocalDateTime.parse(start, formatter),
-                LocalDateTime.parse(end, formatter), unique, uris), HttpStatus.OK);
+        log.info("Getting statistics: with = {}, by = {}, unique ip = {}, filter = {}", start, end, unique, uris);
+
+        return new ResponseEntity<>(service.getStats(LocalDateTime.parse(start, getFormatter()),
+                LocalDateTime.parse(end, getFormatter()), unique, uris), HttpStatus.OK);
     }
 }
