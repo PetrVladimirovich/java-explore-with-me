@@ -24,7 +24,7 @@ public class StatsController {
     private final StatService service;
 
     @PostMapping("/hit")
-    @ResponseStatus
+    @ResponseStatus(HttpStatus.CREATED)
     public void createStat(@RequestBody @NotNull @Valid StatDto dto) {
         log.info("Write in statistics {}", dto);
         service.createStat(dto);
