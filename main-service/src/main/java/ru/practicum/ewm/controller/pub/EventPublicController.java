@@ -56,5 +56,6 @@ public class EventPublicController {
         log.info("Getting an event with id={}", id);
         eventService.postRequestToStat(request);
         return new ResponseEntity<>(eventService.getEventBuIdShortDto(id), HttpStatus.OK);
+
     }
 }
