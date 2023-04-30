@@ -10,14 +10,15 @@ import ru.practicum.ewm.model.User;
 
 import java.time.LocalDateTime;
 
+import static ru.practicum.ewm.DateUtils.DATE_TIME_FORMAT_SS;
+
 @Data
 @NoArgsConstructor
 public class EventShortDto {
-    private static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private String annotation;
     private CategoryDto category;
     private Long confirmedRequests;
-    @JsonFormat(pattern = TIME_FORMAT)
+    @JsonFormat(pattern = DATE_TIME_FORMAT_SS)
     private LocalDateTime eventDate;
     private Long id;
     private UserShortDto initiator;

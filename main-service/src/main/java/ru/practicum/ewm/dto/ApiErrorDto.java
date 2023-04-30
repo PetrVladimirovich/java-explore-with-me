@@ -6,19 +6,22 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import static ru.practicum.ewm.DateUtils.DATE_TIME_FORMAT_SS;
+import static ru.practicum.ewm.DateUtils.getTime;
+
 @Data
 @NoArgsConstructor
 public class ApiErrorDto {
     private String status;
     private String reason;
     private String message;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DATE_TIME_FORMAT_SS)
     private LocalDateTime timestamp;
 
     public ApiErrorDto(String status, String reason, String message) {
         this.status = status;
         this.reason = reason;
         this.message = message;
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = getTime();
     }
 }

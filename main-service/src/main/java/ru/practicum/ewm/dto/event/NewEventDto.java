@@ -11,6 +11,8 @@ import ru.practicum.ewm.validator.EventValid;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
+import static ru.practicum.ewm.DateUtils.DATE_TIME_FORMAT_SS;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -26,7 +28,7 @@ public class NewEventDto {
     @Length(min = 20, max = 7000)
     private String description;
     @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DATE_TIME_FORMAT_SS)
     private LocalDateTime eventDate;
     @NotNull
     private LocationDto location;

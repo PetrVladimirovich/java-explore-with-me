@@ -11,6 +11,8 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
+import static ru.practicum.ewm.DateUtils.DATE_TIME_FORMAT_SS;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -21,7 +23,7 @@ public class UpdateEventUserRequestDto {
     private Integer category;
     @Length(min = 20, max = 7000)
     private String description;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DATE_TIME_FORMAT_SS)
     private LocalDateTime eventDate;
     private LocationDto location;
     private Boolean paid;

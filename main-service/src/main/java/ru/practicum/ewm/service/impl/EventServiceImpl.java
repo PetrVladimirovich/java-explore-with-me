@@ -30,14 +30,14 @@ import ru.practicum.ewm.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static ru.practicum.ewm.DateUtils.DATE_TIME_FORMATTER;
 
 @Service
 public class EventServiceImpl implements EventService {
     private static final String EVENT_PATH = "/events/";
-    private static final String DATE_TIME_FORMATTER = "yyyy-MM-dd HH:mm:ss";
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final RequestRepository requestRepository;
@@ -271,7 +271,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public void postRequestToStat(HttpServletRequest request) {
         StatDto statDto = new StatDto(applicationName, request.getRequestURI(), request.getRemoteAddr(),
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)));
+                LocalDateTime.now().format(DATE_TIME_FORMATTER));
         restClient.post(statDto);
     }
 

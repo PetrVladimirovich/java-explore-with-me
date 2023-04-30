@@ -11,18 +11,19 @@ import ru.practicum.ewm.model.EventStatus;
 import ru.practicum.ewm.model.User;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static ru.practicum.ewm.DateUtils.DATE_TIME_FORMATTER;
+import static ru.practicum.ewm.DateUtils.DATE_TIME_FORMAT_SS;
 
 @Data
 @NoArgsConstructor
 public class EventFullDto {
-    private static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private String annotation;
     private CategoryDto category;
     private Integer confirmedRequests;
     private String createdOn;
     private String description;
-    @JsonFormat(pattern = TIME_FORMAT)
+    @JsonFormat(pattern = DATE_TIME_FORMAT_SS)
     private LocalDateTime eventDate;
     private Long id;
     private UserShortDto initiator;
@@ -41,7 +42,7 @@ public class EventFullDto {
         this.annotation = annotation;
         this.category = new CategoryDto(category.getId(), category.getName());
         this.confirmedRequests = Math.toIntExact(confirmedRequest);
-        this.createdOn = createdOn.format(DateTimeFormatter.ofPattern(TIME_FORMAT));
+        this.createdOn = createdOn.format(DATE_TIME_FORMATTER);
         this.description = description;
         this.eventDate = eventDate;
         this.id = id;
@@ -49,7 +50,7 @@ public class EventFullDto {
         this.location = new LocationDto(lat, lon);
         this.paid = paid;
         this.participantLimit = participantLimit;
-        this.publishedOn = publishedOn == null ? null : publishedOn.format(DateTimeFormatter.ofPattern(TIME_FORMAT));
+        this.publishedOn = publishedOn == null ? null : publishedOn.format(DATE_TIME_FORMATTER);
         this.requestModeration = requestModeration;
         this.state = state;
         this.title = title;
