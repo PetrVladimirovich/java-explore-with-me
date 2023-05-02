@@ -1,9 +1,10 @@
 package ru.practicum.ewm.service;
 
-import org.springframework.data.domain.Page;
 import ru.practicum.ewm.dto.compilation.CompilationDto;
 import ru.practicum.ewm.dto.compilation.NewCompilationDto;
 import ru.practicum.ewm.dto.compilation.UpdateCompilationDto;
+
+import java.util.List;
 
 public interface CompilationService {
     CompilationDto createCompilation(NewCompilationDto dto);
@@ -14,5 +15,5 @@ public interface CompilationService {
 
     CompilationDto getCompilation(Long compId);
 
-    Page<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size);
+    List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size);
 }

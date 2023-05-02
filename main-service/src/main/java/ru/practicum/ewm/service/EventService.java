@@ -1,7 +1,7 @@
 package ru.practicum.ewm.service;
 
-import org.springframework.data.domain.Page;
 import ru.practicum.ewm.dto.event.*;
+import ru.practicum.ewm.dto.event.eventupdate.UpdateEventRequestDto;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.EventStatus;
 
@@ -15,23 +15,25 @@ public interface EventService {
 
     List<EventShortDto> getEventsList(Set<Event> events);
 
-    EventFullDto getUserEventById(Long userId, Long eventId);
+    EventWithReactionFullDto getUserEventById(Long userId, Long eventId);
 
     EventRequestStatusUpdateResultDto updateRequestsStatuses(Long userId, Long eventId, EventRequestStatusUpdateRequest dto);
 
-    EventFullDto updateEvent(Long userId, Long eventId, UpdateEventUserRequestDto dto, Boolean adminStatus);
+    <T extends UpdateEventRequestDto> EventWithReactionFullDto updateEvent(Long userId, Long eventId, T dto);
 
-    Page<EventFullDto> getAllUserEvents(Long userId, Integer from, Integer size);
+    List<EventFullDto> getAllUserEvents(Long userId, Integer from, Integer size, EventSortingTypes sort);
 
-    Page<EventFullDto> getEventsByFilters(List<Long> userIds, List<EventStatus> eventStatus, List<Integer> categories,
-                                          LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size,
-                                          Long eventId);
+    List<EventFullDto> getEventsForPrivateUsersWithFilters(List<Long> userIds, List<EventStatus> eventStatus, List<Integer> categories,
+                                                           LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size,
+                                                           Long eventId, EventSortingTypes sort);
 
-    Page<EventShortDto> getEventsByFiltersShortDto(String text, List<Integer> categories, Boolean paid,
-                                                   LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable,
-                                                   String sort, Integer from, Integer size);
+    List<EventShortDto> getEventsForPublicUsersWithFilters(String text, List<Integer> categories, Boolean paid,
+                                                           LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable,
+                                                           EventSortingTypes sort, Integer from, Integer size);
 
-    EventFullDto getEventBuIdShortDto(Long id);
+    EventFullDto getPublishedEventById(Long id);
 
-    void postRequestToStat(HttpServletRequest request);
+    void addStatisticsToStatServer(HttpServletRequest request);
+
+    List<EventFullDto> getMostRatingEvents(Integer from, Integer size);
 }

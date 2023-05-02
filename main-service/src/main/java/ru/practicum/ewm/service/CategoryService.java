@@ -1,7 +1,8 @@
 package ru.practicum.ewm.service;
 
-import org.springframework.data.domain.Page;
 import ru.practicum.ewm.dto.CategoryDto;
+
+import java.util.List;
 
 public interface CategoryService {
     CategoryDto createCategory(CategoryDto dto);
@@ -10,7 +11,7 @@ public interface CategoryService {
 
     CategoryDto updateCategory(CategoryDto dto);
 
-    Page<CategoryDto> getCategories(Integer from, Integer size);
+    List<CategoryDto> getCategories(Integer from, Integer size);
 
     CategoryDto getCategory(Integer catId);
 }

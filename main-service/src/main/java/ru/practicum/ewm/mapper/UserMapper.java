@@ -3,8 +3,10 @@ package ru.practicum.ewm.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.practicum.ewm.dto.user.UserDto;
+import ru.practicum.ewm.dto.user.UserRatingDto;
 import ru.practicum.ewm.dto.user.UserShortDto;
 import ru.practicum.ewm.model.User;
+import ru.practicum.ewm.repository.UserRepository;
 
 import java.util.List;
 
@@ -19,4 +21,10 @@ public interface UserMapper {
     List<UserDto> toUserDtos(List<User> users);
 
     UserShortDto toUserShortDto(User user);
+
+    @Mapping(target = "id", source = "user.id")
+    @Mapping(target = "name", source = "user.name")
+    UserRatingDto toUserRatingDto(UserRepository.UserRating userRating);
+
+    List<UserRatingDto> toUserRatingDtos(List<UserRepository.UserRating> userRating);
 }

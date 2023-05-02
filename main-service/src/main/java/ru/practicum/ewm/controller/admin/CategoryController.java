@@ -4,22 +4,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.service.CategoryService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/categories")
 public class CategoryController {
     private final CategoryService service;
 
     @PostMapping
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody @NotNull @Valid CategoryDto dto) {
+    public ResponseEntity<CategoryDto> createCategory(@RequestBody @Valid CategoryDto dto) {
         log.info("ADD categories: {}", dto);
         return new ResponseEntity<>(service.createCategory(dto), HttpStatus.CREATED);
     }
@@ -32,10 +32,10 @@ public class CategoryController {
     }
 
     @PatchMapping("{catId}")
-    public ResponseEntity<CategoryDto> patchCategory(@RequestBody @NotNull @Valid CategoryDto dto,
+    public ResponseEntity<CategoryDto> patchCategory(@RequestBody @Valid CategoryDto dto,
                                                      @PathVariable(name = "catId") Integer catId) {
         dto.setId(catId);
         log.info("UPDATE categories: {}", dto);
-        return new ResponseEntity<>(service.updateCategory(dto), HttpStatus.OK);
+        return ResponseEntity.ok(service.updateCategory(dto));
     }
 }

@@ -1,0 +1,1096 @@
+{
+  "info": {
+    "_postman_id": "3de9ab2d-60ea-4015-b2b2-2471f96f7a20",
+    "name": "Test Explore With Me - Rating Events",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Подача заявки на участие в событии",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(201);\r",
+              "});\r",
+              "pm.test(\"Response has body\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/requests?eventId=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "requests"
+          ],
+          "query": [
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Лайк несуществующего события",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 409\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(409);\r",
+              "});\r",
+              "pm.test(\"Error has body\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction?react=LIKE",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "query": [
+            {
+              "key": "react",
+              "value": "LIKE"
+            }
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            },
+            {
+              "key": "eventId",
+              "value": "999"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Некорректное название для лайка\\дизлайка",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(400);\r",
+              "});\r",
+              "pm.test(\"Error has body\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction?react=LIkE",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "query": [
+            {
+              "key": "react",
+              "value": "LIkE"
+            }
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            },
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Дизлайк событию",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(201);\r",
+              "});\r",
+              "pm.test(\"Has rate create response\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "pm.test(\"Test rate 'reaction' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('reaction');\r",
+              "    pm.expect(jsonData.reaction, '\"reaction\" must be \"DISLIKE\"').to.eql('DISLIKE');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction?react=DISLIKE",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "query": [
+            {
+              "key": "react",
+              "value": "DISLIKE"
+            }
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            },
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Проверка отрицательного рейтинга события",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "pm.test(\"Has has event response\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "pm.test(\"Test event 'rating' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('rating');\r",
+              "    pm.expect(jsonData.rating, '\"rating\" must be -1').to.eql(-1);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/events/:eventId",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "events",
+            ":eventId"
+          ],
+          "variable": [
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ошибка при повторной реакции на то же событие",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 409\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(409);\r",
+              "});\r",
+              "pm.test(\"Error has body\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction?react=LIKE",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "query": [
+            {
+              "key": "react",
+              "value": "LIKE"
+            }
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            },
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ошибка при обновлении существующей реакции с таким же статусом реакции",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 409\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(409);\r",
+              "});\r",
+              "pm.test(\"Error has body\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction?react=DISLIKE",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "query": [
+            {
+              "key": "react",
+              "value": "DISLIKE"
+            }
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            },
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Обновление несуществующей реакции",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(404);\r",
+              "});\r",
+              "pm.test(\"Error has body\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction?react=LIKE",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "query": [
+            {
+              "key": "react",
+              "value": "LIKE"
+            }
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "3"
+            },
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Обнолвение реакции на событие",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "pm.test(\"Has rate patch response\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "pm.test(\"Test rate 'reaction' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('reaction');\r",
+              "    pm.expect(jsonData.reaction, '\"reaction\" must be \"DISLIKE\"').to.eql('LIKE');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction?react=LIKE",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "query": [
+            {
+              "key": "react",
+              "value": "LIKE"
+            }
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            },
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ошбика при получении реакций несуществующего события",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(404);\r",
+              "});\r",
+              "pm.test(\"Error has body\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            },
+            {
+              "key": "eventId",
+              "value": "999"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение реакции на событие",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "pm.test(\"Has rate get response\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "pm.test(\"Test rate size\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.length, 'size must be 1').to.equal(1);\r",
+              "});\r",
+              "pm.test(\"Test rate[0] 'eventId' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData[0]).to.have.property('eventId');\r",
+              "    pm.expect(jsonData[0].eventId, '\"eventId\" must be 1').to.eql(1);\r",
+              "});\r",
+              "pm.test(\"Test rate[0] 'reaction' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData[0]).to.have.property('reaction');\r",
+              "    pm.expect(jsonData[0].reaction, '\"reaction\" must be \"LIKE\"').to.eql('LIKE');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            },
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение самых рейтинговых авторов событий",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "pm.test(\"Has userRating get response\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "pm.test(\"Test userRating size\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.length, 'size must be 2').to.equal(2);\r",
+              "});\r",
+              "pm.test(\"Test userRating[0] 'rate' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData[0]).to.have.property('rate');\r",
+              "    pm.expect(jsonData[0].rate, '\"rate\" must be 1').to.eql(1);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/popular?size=2&eventDate=2023-01-01 00:00:00",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "popular"
+          ],
+          "query": [
+            {
+              "key": "size",
+              "value": "2"
+            },
+            {
+              "key": "eventDate",
+              "value": "2023-01-01 00:00:00"
+            }
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Проверка сортировки по рейтингу при поиске событий",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "pm.test(\"Has event get response\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "pm.test(\"Test event[0] 'rating' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData[0]).to.have.property('rating');\r",
+              "    pm.expect(jsonData[0].rating, '\"rating\" must be 1').to.eql(1);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/admin/events?states=PUBLISHED&rangeStart=2022-01-06%2013%3A30%3A38&rangeEnd=2097-09-06%2013%3A30%3A38&from=0&size=1000&sort=RATING",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "events"
+          ],
+          "query": [
+            {
+              "key": "states",
+              "value": "PUBLISHED"
+            },
+            {
+              "key": "rangeStart",
+              "value": "2022-01-06%2013%3A30%3A38"
+            },
+            {
+              "key": "rangeEnd",
+              "value": "2097-09-06%2013%3A30%3A38"
+            },
+            {
+              "key": "from",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "1000"
+            },
+            {
+              "key": "sort",
+              "value": "RATING"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Публичный поиск предстоящих событий по рейтингу",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "pm.test(\"Has event get response\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "pm.test(\"Test event[0] 'rating' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData[0]).to.have.property('rating');\r",
+              "    pm.expect(jsonData[0].rating, '\"rating\" must be 1').to.eql(1);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/events/popular?from=0&size=1000",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "events",
+            "popular"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "1000"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Удаление несуществующей реакции",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(404);\r",
+              "});\r",
+              "pm.test(\"Error has body\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "1"
+            },
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Удаление реакции",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 204\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(204);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:userId/events/:eventId/reaction",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "reaction"
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            },
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Проверка нулевого рейтинга события после удаления реакции",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "pm.test(\"Has has event response\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "pm.test(\"Test event 'rating' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('rating');\r",
+              "    pm.expect(jsonData.rating, '\"rating\" must be 0').to.eql(0);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/events/:eventId",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "events",
+            ":eventId"
+          ],
+          "variable": [
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "default"
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package ru.practicum.ewm.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import ru.practicum.ewm.model.EventStatus;
 import ru.practicum.ewm.model.Request;
 import ru.practicum.ewm.model.RequestStatus;
 
@@ -29,4 +30,6 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     )
     List<Request> getUserEventRequests(Long userId, Long eventId);
+
+    Optional<Request> findByEventIdAndRequesterIdAndEventState(Long eventId, Long userId, EventStatus state);
 }
