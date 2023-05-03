@@ -19,7 +19,7 @@ public interface EventService {
 
     EventRequestStatusUpdateResultDto updateRequestsStatuses(Long userId, Long eventId, EventRequestStatusUpdateRequest dto);
 
-    EventWithReactionFullDto updateEvent(Long userId, Long eventId, UpdateEventRequestDto dto);
+    <T extends UpdateEventRequestDto> EventWithReactionFullDto updateEvent(Long userId, Long eventId, T dto);
 
     List<EventFullDto> getAllUserEvents(Long userId, Integer from, Integer size, EventSortingTypes sort);
 
