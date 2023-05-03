@@ -14,6 +14,7 @@ import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.dto.event.eventupdate.UpdateEventUserRequestDto;
 import ru.practicum.ewm.dto.user.UserRatingDto;
 import ru.practicum.ewm.model.ReactionOnEvent;
+import ru.practicum.ewm.model.ReactionStatus;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.RatingService;
 import ru.practicum.ewm.service.RequestService;
@@ -87,7 +88,7 @@ public class EventPrivateController {
     @PostMapping("/events/{eventId}/reaction")
     public ResponseEntity<ReactionOnEventDto> createReactionOnEvent(@PathVariable(name = "userId") Long userId,
                                                                     @PathVariable(name = "eventId") Long eventId,
-                                                                    @RequestParam(name = "react") ReactionOnEvent.ReactionStatus reactionStatus) {
+                                                                    @RequestParam(name = "react") ReactionStatus reactionStatus) {
         log.info("User adding id={} to event id={}, reactions: {}", userId, eventId, reactionStatus);
         return new ResponseEntity<>(ratingService.createReaction(userId, eventId, reactionStatus), HttpStatus.CREATED);
     }
@@ -95,7 +96,7 @@ public class EventPrivateController {
     @PatchMapping("/events/{eventId}/reaction")
     public ResponseEntity<ReactionOnEventDto> updateReactionOnEvent(@PathVariable(name = "userId") Long userId,
                                                                     @PathVariable(name = "eventId") Long eventId,
-                                                                    @RequestParam(name = "react") ReactionOnEvent.ReactionStatus reactionStatus) {
+                                                                    @RequestParam(name = "react") ReactionStatus reactionStatus) {
         log.info("User adding id={} to event id={}, reactions: {}", userId, eventId, reactionStatus);
         return ResponseEntity.ok(ratingService.updateReaction(userId, eventId, reactionStatus));
     }

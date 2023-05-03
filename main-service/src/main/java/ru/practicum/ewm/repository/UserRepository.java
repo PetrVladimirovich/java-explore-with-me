@@ -18,9 +18,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     )
     Page<UserRating> getMostRateUser(@Param("eventDate") LocalDateTime eventPublishedDate, Pageable page);
 
-    interface UserRating {
-        User getUser();
-
-        Long getRate();
-    }
 }

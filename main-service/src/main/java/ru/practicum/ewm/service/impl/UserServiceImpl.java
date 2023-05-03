@@ -11,6 +11,7 @@ import ru.practicum.ewm.dto.user.UserRatingDto;
 import ru.practicum.ewm.exception.ObjectNotFoundException;
 import ru.practicum.ewm.mapper.UserMapper;
 import ru.practicum.ewm.model.User;
+import ru.practicum.ewm.repository.UserRating;
 import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.service.UserService;
 
@@ -61,8 +62,8 @@ public class UserServiceImpl implements UserService {
         if (eventPublishedDate == null) {
             eventPublishedDate = LocalDateTime.now().minusMonths(3);
         }
-        Page<UserRepository.UserRating> mostRatingUserPage = repository.getMostRateUser(eventPublishedDate, page);
-        List<UserRepository.UserRating> mostRatingUser = mostRatingUserPage.getContent();
+        Page<UserRating> mostRatingUserPage = repository.getMostRateUser(eventPublishedDate, page);
+        List<UserRating> mostRatingUser = mostRatingUserPage.getContent();
         return mapper.toUserRatingDtos(mostRatingUser);
     }
 }

@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.practicum.ewm.dto.ReactionOnEventDto;
 import ru.practicum.ewm.model.ReactionOnEvent;
+import ru.practicum.ewm.model.ReactionStatus;
 import ru.practicum.ewm.model.Request;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public interface RatingMapper {
     @Mapping(target = "reaction", source = "reactionStatus")
     @Mapping(target = "event", source = "request.event")
     @Mapping(target = "timestamp", expression = "java(java.time.LocalDateTime.now())")
-    ReactionOnEvent toReactionOnEvent(Request request, ReactionOnEvent.ReactionStatus reactionStatus);
+    ReactionOnEvent toReactionOnEvent(Request request, ReactionStatus reactionStatus);
 }

@@ -11,10 +11,7 @@ import ru.practicum.ewm.dto.ReactionOnEventDto;
 import ru.practicum.ewm.exception.ConstraintException;
 import ru.practicum.ewm.exception.ObjectNotFoundException;
 import ru.practicum.ewm.mapper.RatingMapper;
-import ru.practicum.ewm.model.Event;
-import ru.practicum.ewm.model.EventStatus;
-import ru.practicum.ewm.model.ReactionOnEvent;
-import ru.practicum.ewm.model.Request;
+import ru.practicum.ewm.model.*;
 import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.repository.RatingRepository;
 import ru.practicum.ewm.repository.RequestRepository;
@@ -31,7 +28,7 @@ public class RatingServiceImpl implements RatingService {
     private final EventRepository eventRepository;
 
     @Override
-    public ReactionOnEventDto createReaction(Long userId, Long eventId, ReactionOnEvent.ReactionStatus reactionStatus) {
+    public ReactionOnEventDto createReaction(Long userId, Long eventId, ReactionStatus reactionStatus) {
         Request request = requestRepository.findByEventIdAndRequesterIdAndEventState(eventId, userId, EventStatus.PUBLISHED)
                 .orElseThrow(() -> new ConstraintException("Event id=" + eventId + " is unavailable, or you have not submitted a " +
                         "application to participate in it"));
@@ -42,7 +39,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     @Transactional
-    public ReactionOnEventDto updateReaction(Long userId, Long eventId, ReactionOnEvent.ReactionStatus reactionStatus) {
+    public ReactionOnEventDto updateReaction(Long userId, Long eventId, ReactionStatus reactionStatus) {
         ReactionOnEvent reactionOnEvent = ratingRepository.findByParticipantIdAndEventId(userId, eventId)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format("User id=%d has not yet left a reaction to the event id=%d", userId, eventId)));
         if (reactionOnEvent.getReaction() != reactionStatus) {

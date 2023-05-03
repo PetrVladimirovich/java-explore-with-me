@@ -30,8 +30,4 @@ public class ReactionOnEvent {
     @Column(name = "created", nullable = false)
     private LocalDateTime timestamp;
 
-    public enum ReactionStatus {
-        LIKE,
-        DISLIKE
-    }
 }
