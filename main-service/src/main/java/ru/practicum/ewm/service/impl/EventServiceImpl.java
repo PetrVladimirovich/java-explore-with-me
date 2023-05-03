@@ -181,7 +181,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public <T extends UpdateEventRequestDto> EventWithReactionFullDto updateEvent(Long userId, Long eventId, T dto) {
+    public EventWithReactionFullDto updateEvent(Long userId, Long eventId, UpdateEventRequestDto dto) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format("Event with id=%d was not found", eventId)));
 
