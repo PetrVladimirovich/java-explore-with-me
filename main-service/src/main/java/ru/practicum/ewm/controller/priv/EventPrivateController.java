@@ -13,7 +13,6 @@ import ru.practicum.ewm.dto.ReactionOnEventDto;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.dto.event.eventupdate.UpdateEventUserRequestDto;
 import ru.practicum.ewm.dto.user.UserRatingDto;
-import ru.practicum.ewm.model.ReactionOnEvent;
 import ru.practicum.ewm.model.ReactionStatus;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.RatingService;
