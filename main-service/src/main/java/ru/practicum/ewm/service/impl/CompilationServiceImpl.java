@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.compilation.CompilationDto;
 import ru.practicum.ewm.dto.compilation.NewCompilationDto;
 import ru.practicum.ewm.dto.compilation.UpdateCompilationDto;
@@ -33,6 +34,9 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto createCompilation(NewCompilationDto dto) {
+        if (dto.getEvents() == null) {
+            dto.setEvents(Collections.emptySet());
+        }
         Compilation compilation = compilationRepository.save(mapper.toCompilation(dto));
         CompilationDto compilationDto = mapper.toCompilationDto(compilation);
         compilationDto.setEvents(eventService.getEventsList(compilation.getEvents()));
@@ -40,6 +44,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto updateCompilation(Long compId, UpdateCompilationDto dto) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format("Compilation with id=%d was not found", compId)));
@@ -53,10 +58,9 @@ public class CompilationServiceImpl implements CompilationService {
         if (dto.getPinned() != null) {
             compilation.setPinned(dto.getPinned());
         }
-        if (!StringUtils.isEmpty(dto.getTitle())) {
+        if (!StringUtils.isBlank(dto.getTitle())) {
             compilation.setTitle(dto.getTitle());
         }
-        compilationRepository.save(compilation);
         CompilationDto compilationDto = mapper.toCompilationDto(compilation);
         compilationDto.setEvents(eventService.getEventsList(compilation.getEvents()));
         return compilationDto;
@@ -71,6 +75,7 @@ public class CompilationServiceImpl implements CompilationService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CompilationDto getCompilation(Long compId) {
         Compilation compilation = compilationRepository.findById(compId)
@@ -80,8 +85,9 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationDto;
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Page<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
+    public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
         Sort sortById = Sort.by(Sort.Direction.DESC, "id");
         Pageable page = PageRequest.of(from / size, size, sortById);
         Page<Compilation> compilationsPage = compilationRepository.getCompilations(pinned, page);
@@ -111,8 +117,7 @@ public class CompilationServiceImpl implements CompilationService {
             compilationDto.setEvents(compilationEventDtos.stream()
                     .sorted(Comparator.comparing(EventShortDto::getEventDate).reversed()).collect(Collectors.toList()));
         }
-        return new PageImpl<>(compilationDtos.stream()
-                .sorted(Comparator.comparing(CompilationDto::getId)).collect(Collectors.toList()),
-                compilationsPage.getPageable(), compilationsPage.getTotalElements());
+        return compilationDtos.stream()
+                .sorted(Comparator.comparing(CompilationDto::getId)).collect(Collectors.toList());
     }
 }

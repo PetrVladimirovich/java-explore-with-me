@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Data
@@ -13,8 +13,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class NewCompilationDto {
     private Set<Long> events;
-    private Boolean pinned = false;
-    @NotEmpty
+    private boolean pinned;
+    @NotBlank
     @Length(max = 500)
     private String title;
 }

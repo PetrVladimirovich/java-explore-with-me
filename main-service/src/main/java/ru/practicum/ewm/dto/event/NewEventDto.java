@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import ru.practicum.ewm.dto.LocationDto;
 import ru.practicum.ewm.validator.EventValid;
 
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
@@ -18,25 +19,25 @@ import static ru.practicum.ewm.DateUtils.DATE_TIME_FORMAT_SS;
 @Data
 @EventValid
 public class NewEventDto {
-    @NotNull
+    @NotBlank
     @Length(min = 20, max = 2000)
     private String annotation;
-    @NotNull
     @Positive
-    private Integer category;
-    @NotNull
+    private int category;
+    @NotBlank
     @Length(min = 20, max = 7000)
     private String description;
     @NotNull
     @JsonFormat(pattern = DATE_TIME_FORMAT_SS)
     private LocalDateTime eventDate;
     @NotNull
+    @Valid
     private LocationDto location;
-    private Boolean paid = false;
+    private boolean paid = false;
     @PositiveOrZero
     private Integer participantLimit = 0;
-    private Boolean requestModeration = true;
-    @NotNull
+    private boolean requestModeration = true;
+    @NotBlank
     @Length(min = 3, max = 120)
     private String title;
 }

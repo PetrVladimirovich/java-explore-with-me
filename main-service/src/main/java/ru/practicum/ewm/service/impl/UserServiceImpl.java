@@ -4,17 +4,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import ru.practicum.ewm.dto.user.UserDto;
+import ru.practicum.ewm.dto.user.UserRatingDto;
 import ru.practicum.ewm.exception.ObjectNotFoundException;
 import ru.practicum.ewm.mapper.UserMapper;
 import ru.practicum.ewm.model.User;
+import ru.practicum.ewm.repository.UserRating;
 import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.service.UserService;
 
-import java.util.Comparator;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,22 +38,32 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Page<UserDto> getUsers(List<Long> ids, Integer from, Integer size) {
+    public List<UserDto> getUsers(List<Long> ids, Integer from, Integer size) {
         List<UserDto> userDtos;
         if (CollectionUtils.isEmpty(ids)) {
             Sort sortById = Sort.by(Sort.Direction.ASC, "id");
             Pageable page = PageRequest.of(from / size, size, sortById);
             Page<User> usersPage = repository.findAll(page);
             userDtos = mapper.toUserDtos(usersPage.getContent());
-            return new PageImpl<>(userDtos.stream()
-                    .sorted(Comparator.comparing(UserDto::getId))
-                    .collect(Collectors.toList()), usersPage.getPageable(), usersPage.getTotalElements());
+            return userDtos;
         } else {
             userDtos = mapper.toUserDtos(repository.findAllById(ids));
-            return new PageImpl<>(userDtos.stream()
-                    .sorted(Comparator.comparing(UserDto::getId))
-                    .collect(Collectors.toList()));
+            return userDtos;
         }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<UserRatingDto> getMostRatingUser(Integer from, Integer size, LocalDateTime eventPublishedDate) {
+        Sort sortByRating = Sort.by(Sort.Direction.DESC, "rate");
+        Pageable page = PageRequest.of(from / size, size, sortByRating);
+        if (eventPublishedDate == null) {
+            eventPublishedDate = LocalDateTime.now().minusMonths(3);
+        }
+        Page<UserRating> mostRatingUserPage = repository.getMostRateUser(eventPublishedDate, page);
+        List<UserRating> mostRatingUser = mostRatingUserPage.getContent();
+        return mapper.toUserRatingDtos(mostRatingUser);
     }
 }

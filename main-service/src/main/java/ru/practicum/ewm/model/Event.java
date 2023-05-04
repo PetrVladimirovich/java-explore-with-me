@@ -1,18 +1,21 @@
 package ru.practicum.ewm.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "events")
 public class Event {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(nullable = false, length = 2000)
     private String annotation;
     @ManyToOne(targetEntity = Category.class, fetch = FetchType.LAZY)
@@ -24,9 +27,6 @@ public class Event {
     private String description;
     @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User initiator;
@@ -46,4 +46,12 @@ public class Event {
     private EventStatus state;
     @Column(nullable = false, length = 120)
     private String title;
+    @Formula("(select count(r.id) from requests r where r.event_id = id and r.status = 'CONFIRMED')")
+    private Long confirmedRequests;
+    @Formula("(select count(b.id) - count(c.id) from event_likes a " +
+            "left join event_likes b on a.id=b.id and b.reaction = 'LIKE' " +
+            "left join event_likes c on a.id=c.id and c.reaction = 'DISLIKE' " +
+            "where a.id_event = id " +
+            ")")
+    private Long rating;
 }
